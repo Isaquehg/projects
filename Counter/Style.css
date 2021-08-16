@@ -1,6 +1,7 @@
 body {
-    background: rgb(104, 245, 139);
-    font: normal 16pt Arial;
+    background-image: url(Calculator.png);
+    background-size: cover;
+    font: normal 18pt Arial;
 }
 header {
     color: whitesmoke;
@@ -9,10 +10,13 @@ header {
 section {
     background: whitesmoke;
     border-radius: 11px;
-    padding: 8px;
+    padding: 10px;
     margin: auto;
     width: 700px;
     box-shadow: 5px 5px 8px rgba(0, 0, 0, 0.479);
+}
+div {
+    font-family: Arial, Helvetica, sans-serif
 }
 footer {
     color: whitesmoke;

@@ -1,4 +1,4 @@
-//Project using for loops
+//Project using FOR loops
 function counting(){
     let sta_txt = window.document.getElementById('spoint');//start point
     let end_txt = window.document.getElementById('epoint');//end point
@@ -6,17 +6,26 @@ function counting(){
     let res = window.document.getElementById('res');//counting result
 
     //filtering input
-    if(sta.value.length == 0 || end.value.length == 0 || steps.value.length == 0){
+    if(sta_txt.value.length == 0 || end_txt.value.length == 0 || steps_txt.value.length == 0){
         window.alert('Please, verify the input!');
     }
     else{
-        res.innerHTML = 'Counting... ';
-        let sta = Number(sta_txt);
-        let end = Number(end_txt);
-        let steps = Number(steps_txt);
+        res.innerHTML = 'Counting... <br>';
+        //conveting values
+        let sta = Number(sta_txt.value);
+        let end = Number(end_txt.value);
+        let steps = Number(steps_txt.value);
         
-        for(let i = sta; i <= end; i += steps){
-            res.innerHTML += `${i} \u{1F601}`;
+        if(sta < end){//ascending
+            for(let i = sta; i <= end; i += steps){
+                res.innerHTML += ` ${i} \u{1F449}`;
+            }
         }
+        else{ //Descending
+            for(let i = sta; i >= end; i -= steps){
+                res.innerHTML += ` ${i} \u{1F449}`;
+            }
+        }
+        res.innerHTML += ' <br>END!';
     }
 }
