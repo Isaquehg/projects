@@ -3,9 +3,9 @@
 using namespace std;
 
 struct dados{
-    int distancias[10][100];//distancia do local x para o y (grafo)
-    int entregas[10][100];//entrega do local x com peso y
-    int dist_sup[10];//distancia do supermercado do entregador x
+    int distancias[10][10];//distancia do local x para o y (grafo)
+    int entregas[10];//peso da entrega do local x
+    int dist_sup[100];//distancia do supermercado do entregador x
     int dist_local[10][10];//distancia do entregador x ao local y
 };
 
@@ -14,7 +14,7 @@ int main(){
     dados info;//struct para informacoes
     int n_locais;//numero de locais
     int n_entregadores;//numero de entregadores
-    
+
 
     //input dos locais e suas distancias(grafo)
     //input do numero de entregadores e suas distancias do supermercado
