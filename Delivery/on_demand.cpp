@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
 
@@ -14,6 +15,7 @@ int main(){
     dados info;//struct para informacoes
     int n_locais;//numero de locais
     int n_entregadores;//numero de entregadores
+    int carga = 18;//peso suportado pelos entregadores
 
     //input numero de locais e numero de entregadores
     cout << "Entre com o numero de locais e com o numero de entregadores: ";
@@ -44,13 +46,11 @@ int main(){
 
     //ordenacao de menor distancia de cada entregador ao supermercado
     int menor[100];
-    for(int i = 0; i < 100; i ++)//"zerando" o vetor
-        menor[i] = 10000;
-    for(int i = 0; i < n_entregadores; i ++){
-        //ordenacao dos entregadores do mais perto ao mais longe do supermercado
-    }
+    for(int i = 0; i < n_entregadores; i ++)//"passando os dados para o vetor desordenado
+        menor[i] = info.dist_sup[i];
+    sort(menor[0], menor[n_entregadores]);
 
-    //calculo de distancia e tempo de cada entregador ate cada casa
+    //calculo de distancia e tempo de cada entregador do supermercado ate cada casa
 
     //calculo de quais pacotes irao com cada entregador
 
