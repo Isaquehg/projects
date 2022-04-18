@@ -1,5 +1,5 @@
 #include <iostream>
-#include <algorithm>
+#include <climits>
 
 using namespace std;
 
@@ -44,18 +44,13 @@ int main(){
         cin >> info.entregas[i];
     }
 
-    //ordenacao de menor distancia de cada entregador ao supermercado
-    int menor[100];
-    for(int i = 0; i < n_entregadores; i ++)//"passando os dados para o vetor desordenado
-        menor[i] = info.dist_sup[i];
-    sort(menor[0], menor[n_entregadores]);
-
-    //calculo de distancia e tempo de cada entregador do supermercado ate cada casa
-
-    //calculo de quais pacotes irao com cada entregador
+    //calculo do tempo de cada entregador ate cada casa passando pelo supermercado
 
 
-    //output de quais compras ficaram com cada entregadro
+    //depois de decidir qual entregador esta mais perto de certo local, verificar se cabe em sua mochila, caso contrario, verificar o outro mais perto
+
+
+    //output de quais compras ficaram com cada entregador
     //output do tempo percorrido por cada entregador
     //output da recuperacao de caminho de cada entregador
 
