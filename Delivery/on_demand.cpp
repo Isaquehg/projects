@@ -44,8 +44,20 @@ void quem_leva(dados1 local[], dados2 entregador[], int n_locais, int n_entregad
         for(int z = 0; z < n_locais; z ++){
             entregador[entregador_escolhido].dist_local[z] = local[local_atual].distancia[z];
         }
+        //output de quais compras ficaram com cada entregador
         cout << "Entregador " << entregador_escolhido << " entregou para o local " << local_atual << endl;
         cout << "Tempo : " << entregador[entregador_escolhido].tempo << endl;
+    }
+    //output do tempo percorrido por cada entregador
+    for(int i = 0; i < n_entregadores; i ++){
+        cout << "Tempo gasto pelo entregador " << i << ": " << entregador[i].tempo;
+        cout << endl;
+        cout << "Caminho do entregador " << i << ": 0 ";
+        //output para recuperacao de caminho de cada entregador
+        for(int j = 0; j < entregador[i].n_entregas; j ++){
+            cout << entregador[i].caminho[j] << " ";
+        }
+        cout << endl;
     }
     
 }
@@ -106,10 +118,6 @@ int main(){
   
     //calculo do tempo de cada entregador ate cada casa passando pelo supermercado
     quem_leva(local, entregador, n_locais, n_entregadores);
-
-    //output de quais compras ficaram com cada entregador
-    //output do tempo percorrido por cada entregador
-    //output da recuperacao de caminho de cada entregador
 
     return 0;
 }
