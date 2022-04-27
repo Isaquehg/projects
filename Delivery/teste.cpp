@@ -37,8 +37,8 @@ void cria_aresta(list<no>adj[], int u, int v, int d){
     adj[v].push_back(aui);
 }
 void dijkstra(list<no>adj[], int nVertices, int start, int end, int &custo, int entregador, list<int> caminho[], int x[]){
-    int v;//vertice
     custo = 0;
+    int v;//vertice
     int destino;//vertice de destino
     int weight;//distancia da aresta analisada
     int dist;//distancia auiiliar
@@ -80,14 +80,15 @@ void dijkstra(list<no>adj[], int nVertices, int start, int end, int &custo, int 
     stack.push_front(end);
     u = end;
     while(parent[u] != -1){
+        cout << "Entrou aqui" << endl;
         stack.push_front(parent[u]);
         u = parent[u];
     }
-    x = 0;
+    x[entregador] = 0;
     while(!stack.empty()){
         x[entregador] ++;
         caminho[entregador].push_front(*stack.begin());
-        cout << *stack.begin() << " ";
+        cout << *stack.begin() << " - ";
         stack.pop_front();
     }
     cout << endl;
@@ -111,6 +112,7 @@ int main(){
     cout << "Entre com o numero de locais e de entregadores: ";
     cin >> n_locais >> n_entregadores;
     cout << endl;
+    cout << "Obs.: Local 0 sera o supermercado." << endl;
     for(int i = 0; i < (n_locais - 1); i ++){
         for(int j = i + 1; j < n_locais; j ++){
             cout << "Entre com a distancia do local " << i << " ao local " << j << " em minutos: ";
@@ -134,40 +136,41 @@ int main(){
         motoboy[i].tempo_total += x;
         motoboy[i].local_atual = 0;
         motoboy[i].mochila = 0;
+        caminho[i].push_front(motoboy[i].local_atual);
     }
 
     int menor = INT_MAX;
     int motoboy_escolhido;
-    int n_locais_atual[100];
+    int n_locais_passou[100];//numero de locais q passou na funcao djikstra para testar menor caminho
     for(int i = 1; i < n_locais; i ++){
         for(int j = 0; j < n_entregadores; j ++){    
-            //motoboy[j].local_atual >> i;
-            dijkstra(adj, n_locais, motoboy[j].local_atual, i, custo_atual, j, caminho, n_locais_atual);
+            dijkstra(adj, n_locais, motoboy[j].local_atual, i, custo_atual, j, caminho, n_locais_passou);
             if(custo_atual < menor && (motoboy[j].mochila + local[i].peso <= 18)){
                 motoboy_escolhido = j;
             }
-            for(int z = 0; z < n_locais_atual[j]; z ++){
+            for(int z = 0; z < n_locais_passou[j]; z ++){
                 caminho[z].pop_front();//remover do caminho percorrido caso nao seja o entregador escolhido
             }
         }
         motoboy[motoboy_escolhido].local_atual = i;//atualizacao do local atual do entregador
-        motoboy[motoboy_escolhido].mochila += local[i].peso;//peso gasto
-        motoboy[motoboy_escolhido].tempo_total += local[motoboy[motoboy_escolhido].local_atual].dist[i];//distancia gasta
-        motoboy[motoboy_escolhido].entregou.push_front(i);//compra entregue pelo motoboy
+        motoboy[motoboy_escolhido].mochila += local[i].peso;//peso gasto pela entrega do local i
+        motoboy[motoboy_escolhido].tempo_total += local[motoboy[motoboy_escolhido].local_atual].dist[i];//distancia gasta ate o local i
+        motoboy[motoboy_escolhido].entregou.push_front(i);//compra do local i entregue pelo motoboy
         menor = INT_MAX;
     }
 
     //OUTPUT
     for(int j = 0; j < n_entregadores; j ++){
-        for(int i = 0; i < n_locais_atual[j]; i ++){
-            cout << "O caminho do entregador " << i << " foi: ";
-            cout << *caminho[i].begin() << " - ";
-            caminho[i].pop_front();
+        //for(int i = 0; i < n_locais_passou[j]; i ++){
+        cout << "O caminho do entregador " << j << " foi: ";
+        while(!caminho[j].empty()){
+            cout << *caminho[j].begin() << " - ";
+            caminho[j].pop_front();
         }
         cout << endl;
-        cout << "O tempo total percorrido pelo entregador " << j << " foi de: " << motoboy[i].tempo_total << endl;
+        cout << "O tempo total percorrido pelo entregador " << j << " foi de: " << motoboy[j].tempo_total << endl;
         cout << "As compras entregues pelo entregador " << j << " foram: ";
-        while(!motoboy[i].entregou.empty()){
+        while(!motoboy[j].entregou.empty()){
             cout << *motoboy[j].entregou.begin() << " - ";
             motoboy[j].entregou.pop_front();
         }
