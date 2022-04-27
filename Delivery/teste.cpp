@@ -9,22 +9,17 @@ struct no{
     int distancia;//distancia aresta
 };
 struct info{
-    int peso;
-    int dist[100];
-    int entregue;
+    int peso;//peso da entrega
+    int dist[100];//distancia entre os pontos
+    int entregue;//local que foi entregue
 };
 struct entrega{
-    int mochila;
-    int tempo_total;
-    int local_atual;
-    list<int> entregou;
-    list<int> caminho;
+    int mochila;//capacidade restante
+    int tempo_total;//tempo que andou total
+    int local_atual;//local do entregador
+    list<int> entregou;//lista para quais locais o entregador levou
+    list<int> caminho;//lista por quais locais o entregador passou
 };
-
-void caminho_entregador(int local, int entregador){
-    entrega motoboy[100];
-    motoboy[entregador].caminho.push_back(local);
-}
 
 void cria_aresta(list<no>adj[], int u, int v, int d){
     no aui;//auxiliar
@@ -36,8 +31,8 @@ void cria_aresta(list<no>adj[], int u, int v, int d){
     aui.v = u;
     adj[v].push_back(aui);
 }
-void dijkstra(list<no>adj[], int nVertices, int start, int end, int &custo, int entregador, list<int> caminho[], int x[]){
-    custo = 0;
+void dijkstra(list<no>adj[], int nVertices, int start, int end, int &custo, int entregador, list<int> caminho[], int &x){
+    custo = 0;//custo p/ enviar p/ func main()
     int v;//vertice
     int destino;//vertice de destino
     int weight;//distancia da aresta analisada
@@ -47,7 +42,7 @@ void dijkstra(list<no>adj[], int nVertices, int start, int end, int &custo, int 
     int distancia[100];//vetor p distancias
     bool intree[100];//se esta na arvore
     list<int> stack;//pilha p resultado
-    list<no>::iterator p;
+    list<no>::iterator p;//iterator
     for(u = 0; u < nVertices; u ++){
         intree[u] = false;
         distancia[u] = INT_MAX;
@@ -76,20 +71,19 @@ void dijkstra(list<no>adj[], int nVertices, int start, int end, int &custo, int 
         }
     }
     //output
-    cout << "Menor caminho: ";
+    cout << "Menor caminho do entregador " << entregador << " do local " << start << " ao " << end << ": ";
     stack.push_front(end);
     u = end;
     while(parent[u] != -1){
-        cout << "Entrou aqui" << endl;
         stack.push_front(parent[u]);
         u = parent[u];
     }
-    x[entregador] = 0;
+    x = 0;
     while(!stack.empty()){
-        x[entregador] ++;
-        caminho[entregador].push_front(*stack.begin());
+        caminho[entregador].push_back(*stack.begin());
         cout << *stack.begin() << " - ";
         stack.pop_front();
+        x ++;
     }
     cout << endl;
     custo = distancia[end];
@@ -133,28 +127,39 @@ int main(){
     for(int i = 0; i < n_entregadores; i ++){
         cout << "Entre com a distancia do entregador " << i << " ate o supermercado: ";
         cin >> x;
+        motoboy[i].tempo_total = 0;
         motoboy[i].tempo_total += x;
         motoboy[i].local_atual = 0;
         motoboy[i].mochila = 0;
-        caminho[i].push_front(motoboy[i].local_atual);
+        caminho[i].push_back(0);
     }
 
     int menor = INT_MAX;
     int motoboy_escolhido;
+    int custo_escolhido;
     int n_locais_passou[100];//numero de locais q passou na funcao djikstra para testar menor caminho
+    list<int> caminho_func[100];//caminho do entregador
     for(int i = 1; i < n_locais; i ++){
-        for(int j = 0; j < n_entregadores; j ++){    
-            dijkstra(adj, n_locais, motoboy[j].local_atual, i, custo_atual, j, caminho, n_locais_passou);
+        for(int j = 0; j < n_entregadores; j ++){   
+            //dijkstra(grafo, numero_de_locais, local_do_entregador, local_da_entrega, custo, id_entregador, lista_do_caminho, numero_de_locais_q_passou) 
+            dijkstra(adj, n_locais, motoboy[j].local_atual, i, custo_atual, j, caminho_func, n_locais_passou[j]);
             if(custo_atual < menor && (motoboy[j].mochila + local[i].peso <= 18)){
                 motoboy_escolhido = j;
+                custo_escolhido = custo_atual;
             }
+        }
+        //adicionar ao caminho os locais do entregador escolhido para tal entrega
+        for(int j = 0; j < n_entregadores; j ++){
             for(int z = 0; z < n_locais_passou[j]; z ++){
-                caminho[z].pop_front();//remover do caminho percorrido caso nao seja o entregador escolhido
+                if(j == motoboy_escolhido){
+                    caminho[j].push_back(*caminho_func[j].begin());
+                }
+                caminho_func[j].pop_front();
             }
         }
         motoboy[motoboy_escolhido].local_atual = i;//atualizacao do local atual do entregador
         motoboy[motoboy_escolhido].mochila += local[i].peso;//peso gasto pela entrega do local i
-        motoboy[motoboy_escolhido].tempo_total += local[motoboy[motoboy_escolhido].local_atual].dist[i];//distancia gasta ate o local i
+        motoboy[motoboy_escolhido].tempo_total += custo_escolhido;//distancia gasta ate o local i
         motoboy[motoboy_escolhido].entregou.push_front(i);//compra do local i entregue pelo motoboy
         menor = INT_MAX;
     }
