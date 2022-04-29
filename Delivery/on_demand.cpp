@@ -1,12 +1,10 @@
 #include <iostream>
-#include <climits>
 
 using namespace std;
 
 struct dados1{
     int distancia[100]; //distancia ate o local x
     int peso; //peso da entrega do local
-    bool entregue;//verificar se a compra desse local ja foi entregue
 };
 
 struct dados2{
@@ -83,17 +81,10 @@ int main(){
             cout << endl;
         }
     }
-
     //distancias dos entregadores ate o supermercado
-    int m = 10000;//menor distancia
-    int motoboy;//entregador c menor distancia
     for(int i = 0; i < n_entregadores; i ++){
         cout << "Entre com a distancia do entregador " << i << " ate o supermercado em minutos: ";
         cin >> entregador[i].dist_sup;
-        if(entregador[i].dist_sup < m){
-            m = entregador[i].dist_sup;
-            motoboy = i;
-        }
     }
 
     //input do local e peso de cada entrega
@@ -105,11 +96,6 @@ int main(){
     }
 
     //reset
-    int passou[100];//verificar se ja passou no local
-    for(int i = 0; i < n_locais; i ++){//resetando visitas aos locais
-        passou[i] = false;
-        local[i].entregue = false;
-    }
     for(int i = 0; i < n_entregadores; i ++){//somando tempo ao supermercado no custo total
         entregador[i].tempo = entregador[i].dist_sup;
         entregador[i].n_entregas = 0;
